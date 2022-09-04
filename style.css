@@ -4,13 +4,16 @@
     box-sizing: border-box;
 }
 :root{
-    --DarkPurple: #1B0044;
+    --DarkPurple: #1b00445e;
     --Purple: #5727A3;
-    --SemiLightPurple: #9153F4;
-    --LightPurple: #D6C5F0; 
+    --SemiLightPurple: #9153f44e;
+    --LightPurple: #d6c5f064; 
+    --textColor: white;
+    --purpleShadow: 0px 0px 5px 5px var(--Purple);
 }
 
 #container{
+    background-image: url("./images/background.jpg");
     border: solid;
     position: relative;
     text-align: center;
@@ -19,17 +22,18 @@
 }
 
 header{
+    color: var(--textColor);
     margin-bottom: 10px;
 }
 
 #application-area{
-    overflow: auto;
+    box-shadow: var(--purpleShadow);
+    overflow-y: auto;
     border-radius: 10px;
     padding: 20px;
     height: 90%;
     width: 60%;
-    background-color: var(--LightPurple);
-    border: 5px solid var(--DarkPurple);
+    background-color: var(--DarkPurple);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -37,19 +41,24 @@ header{
 }
 
 #top-menu{
+    background-color: var(--DarkPurple);
     padding: 20px;
-    border: solid;
+    box-shadow: var(--purpleShadow);
+    border-radius: 5px;
     display: flex;
     width: 100%;
     margin-bottom: 20px;
     justify-content: center;
-    background-color: var(--LightPurple);
+    /* background-color: var(--LightPurple); */
 }
 #top-menu ul{
     width: 100%;
     list-style:none;
     display: flex;
     justify-content: space-around;
+}
+#top-menu li p{
+    color: var(--textColor);
 }
 
 #textWriter{
@@ -66,8 +75,9 @@ header{
     align-items: center;
     cursor: pointer;
 }
-.buttons img{
-    width:30px;
+.buttons i{
+    margin-left: 5px;
+    color: white;
 }
 .buttons p{
     font-weight: bold;
@@ -78,50 +88,61 @@ header{
 /* note design */
 
 .note{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: var(--SemiLightPurple);
     display: flex;
     margin-top: 10px;
-    border: solid;
-    border-radius: 5px;
     width: 100%;
-    height: 100px;
+    min-height: 100px;
+    border-radius: 8px;
 }
 
 .noteText{
-    display: flex;
-    height: 100px;
-    width: 85%;
+    min-height: 100px;
+    width: 80%;
+    text-align: center;
+
 
 }
 
 .delete-button{
-    height: 100px;
-    width: 15%;
+    width: 20%;
     cursor: pointer;
 }
 
 .noteText p{
     display: flex;
-    width: 100%;
-    justify-content: left;
     align-items: center;
-    margin-left: 5px;
+    min-height: 100px;
+    font-weight: bold;
+    font-size: 20px;
+    color: var(--textColor);
+    /* display: flex;
+    align-items: center; */
+    margin-left: 15px;
+
 }
-
-
 
 
 /* delete button align */
 
 .deleteText{
-    height: 100px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-
+.deleteText i{
+    margin: 10px;
+    color: white;
+}
 /* hide note */
 
 .hide{
     display: none;
+}
+.taskComplete{
+    text-decoration: line-through;
 }
