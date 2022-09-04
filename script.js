@@ -75,7 +75,16 @@ saveText.onclick = () =>{
     const deleteClass = trashImg.classList;
     deleteClass.add("delete");
     
-    
+    // hide notes when writing
+    if(pageArea.classList.contains("hide")){
+        pageArea.classList.toggle("hide");
+    }
+    // else{
+    //     pageArea.classList.toggle("hide");
+    // }
+
+
+
     // hide textInput
     if(!textInput.classList.contains("hide")){
         textInput.classList.toggle("hide");
@@ -90,6 +99,12 @@ newText.onclick = () => {
     // show textInput
     textInput.classList.toggle("hide");
     textInput.value = "";
+
+    if(!pageArea.classList.contains("hide")){
+        pageArea.classList.add("hide");
+    }else{
+        pageArea.classList.toggle("hide");
+    }
 }
 
 document.addEventListener("click", (e) =>{

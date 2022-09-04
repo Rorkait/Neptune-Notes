@@ -7,7 +7,7 @@
     --DarkPurple: #1b00445e;
     --Purple: #5727A3;
     --SemiLightPurple: #9153f44e;
-    --LightPurple: #d6c5f064; 
+    --LightPurple: #c1a6e9; 
     --textColor: white;
     --purpleShadow: 0px 0px 5px 5px var(--Purple);
 }
@@ -62,10 +62,14 @@ header{
 }
 
 #textWriter{
+    padding: 5px;
+    font-size: 20px;
     border-radius: 5px ;
-    background-color: rgb(227, 223, 223);
+    color: white;
+    background-color: var(--LightPurple);
     width: 100%;
-    padding: 20px;
+    height: 600px;
+
 }
 
 .buttons{
