@@ -9,11 +9,10 @@ let pageArea = document.querySelector(".text-file");
 
 let textInput = document.querySelector("#textWriter");
 
+let edit = false;
+let editText;
 
-
-saveText.onclick = () =>{
-    if(textInput.value != ""){
-    // create elements
+function createNote(Text){
     let note = document.createElement("div");
     let noteText = document.createElement("div");
     let text = document.createElement("p");
@@ -24,6 +23,14 @@ saveText.onclick = () =>{
     let trashImg =  document.createElement("i");
     
     let taskComplete = document.createElement("i")
+
+    let editNote = document.createElement("i");
+
+    // set icon edit class
+     // <i class="fa-regular fa-pen-to-square"></i>
+    editNote.classList.add("fa-regular");
+    editNote.classList.add("fa-pen-to-square");
+    editNote.classList.add("fa-2x");
 
     // set icon complete class
     const taskClass = taskComplete.classList;
@@ -66,34 +73,62 @@ saveText.onclick = () =>{
     addDeleteTextClass.add("deleteText")
     
     // add buttons to deleteText
+    deleteText.appendChild(editNote);
     deleteText.appendChild(taskComplete);
     deleteText.appendChild(trashImg);
 
     // add class to buttons
+    editNote.classList.add("edit");
     const completeClass = taskComplete.classList;
     completeClass.add("complete");
     const deleteClass = trashImg.classList;
     deleteClass.add("delete");
+
+    text.innerText = textInput.value;
+}
+
+
+let pText1;
+
+
+
+saveText.onclick = () =>{
+    if(textInput.value != "" && edit == false){
+    // create Note
+    createNote();
     
     // hide notes when writing
     if(pageArea.classList.contains("hide")){
         pageArea.classList.toggle("hide");
     }
-    // else{
-    //     pageArea.classList.toggle("hide");
-    // }
-
-
 
     // hide textInput
     if(!textInput.classList.contains("hide")){
         textInput.classList.toggle("hide");
     }
-    
-    text.innerText = textInput.value;
     }
+
+    // Edit Text
+    if(edit == true){
+        pText1.innerText = textInput.value;
+        edit = false;
+        // hide notes when writing
+    if(pageArea.classList.contains("hide")){
+        pageArea.classList.toggle("hide");
+    }
+
+    // hide textInput
+    if(!textInput.classList.contains("hide")){
+        textInput.classList.toggle("hide");
+    }
+        
+    }
+    
     textInput.value = "";
+
 }
+
+
 
 newText.onclick = () => {
     // show textInput
@@ -112,12 +147,12 @@ document.addEventListener("click", (e) =>{
     const targetEl = e.target;
     const parentEl = targetEl.closest("div");
 
-
+    // Delete button
     if(targetEl.classList.contains("delete")){
     const deleteEl = parentEl.closest(".note");
-    deleteEl.remove();
+    deleteEl.remove(e.target);
     }
-
+    // complete button
     if(targetEl.classList.contains("complete")){
         let parentDiv = targetEl.closest("div");
         let parentNote = targetEl.closest(".note");
@@ -130,6 +165,30 @@ document.addEventListener("click", (e) =>{
             p.classList.add("taskComplete");
         }
         }
+        if(targetEl.classList.contains("edit")){
+            edit = true;
+            if(!textInput.classList.contains("hide")){
+                textInput.classList.toggle("hide");
+
+            }
+            let parentText = targetEl.closest(".note");
+            let parentNoteText = parentText.children[0];
+            let pText =  parentNoteText.children[0];
+            textInput.value = pText.innerText;
+            pText.innerText = textInput.value;
+            pText1 = pText;
+            
+            textInput.classList.toggle("hide");
+
+            // editElement();
+
+
+            if(!pageArea.classList.contains("hide")){
+            pageArea.classList.add("hide");
+            }else{
+            pageArea.classList.toggle("hide");
+            }
+            }
 });
 
 
