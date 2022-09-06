@@ -3,99 +3,136 @@ let newText = document.querySelector("#newText");
 let saveText = document.querySelector("#saveText")
 
 
-let deleteText = document.querySelector(".deleteText");
-
 let pageArea = document.querySelector(".text-file");
 
 let textInput = document.querySelector("#textWriter");
 
 let edit = false;
 let editText;
+let notesArray = [];
 
-function createNote(Text){
-    let note = document.createElement("div");
-    let noteText = document.createElement("div");
-    let text = document.createElement("p");
 
-    let deleteButton = document.createElement("div");
-    let deleteText = document.createElement("div");
+class Note{
+    constructor(text){
+    this.note= document.createElement("div");   
+    this.noteText = document.createElement("div");
+    this.text = document.createElement("p");
 
-    let trashImg =  document.createElement("i");
+    this.deleteButton = document.createElement("div");
+    this.deleteText = document.createElement("div");
+
+    this.trashIcon =  document.createElement("i");
     
-    let taskComplete = document.createElement("i")
+    this.taskComplete = document.createElement("i")
 
-    let editNote = document.createElement("i");
+    this.editNote = document.createElement("i");
 
     // set icon edit class
-     // <i class="fa-regular fa-pen-to-square"></i>
-    editNote.classList.add("fa-regular");
-    editNote.classList.add("fa-pen-to-square");
-    editNote.classList.add("fa-2x");
+    this.editNote.classList.add("fa-regular");
+    this.editNote.classList.add("fa-pen-to-square");
+    this.editNote.classList.add("fa-2x");
 
     // set icon complete class
-    const taskClass = taskComplete.classList;
-    taskClass.add("fa-solid");
-    taskClass.add("fa-check");
-    taskClass.add("fa-2x");
+    this.taskComplete.classList.add("fa-solid");
+    this.taskComplete.classList.add("fa-check");
+    this.taskComplete.classList.add("fa-2x");
+    
     // set icon trash class
-    const iconClass = trashImg.classList;
-    iconClass.add("fa-solid");
-    iconClass.add("fa-trash-can");
-    iconClass.add("fa-2x");
-    // set parent element
-    pageArea.appendChild(note);
-    // two DIVs inside note container
-    note.appendChild(noteText);
-    note.appendChild(deleteButton);
+    this.trashIcon.classList.add("fa-solid");
+    this.trashIcon.classList.add("fa-trash-can");
+    this.trashIcon.classList.add("fa-2x");
+
+    // set Note in the page
+    pageArea.appendChild(this.note);
+
+    // text and buttons inside note container
+    this.note.appendChild(this.noteText);
+    this.note.appendChild(this.deleteButton);
     
     // set P child to noteText
-    noteText.appendChild(text);
+    this.noteText.appendChild(this.text);
 
-    // set deleteText child to delete-button
-    deleteButton.appendChild(deleteText);
+    // set buttons child to buttons container
+    this.deleteButton.appendChild(this.deleteText);
 
     // Add Classes to the element
 
     // First Class note
-    const addNoteClass = note.classList;
-    addNoteClass.add("note");
+    this.note.classList.add("note");
     
     // Second Class noteText 
-    const addNoteTextClass = noteText.classList;
-    addNoteTextClass.add("noteText");
+    this.noteText.classList.add("noteText");
     
-    // Third Class delete-button
-    const addDeleteButtonClass = deleteButton.classList;
-    addDeleteButtonClass.add("delete-button");
+    // Third Class buttons
+    this.deleteButton.classList.add("buttons");
 
     // Fourth Class deleteText
-    const addDeleteTextClass = deleteText.classList;
-    addDeleteTextClass.add("deleteText")
+    this.deleteText.classList.add("deleteText")
     
     // add buttons to deleteText
-    deleteText.appendChild(editNote);
-    deleteText.appendChild(taskComplete);
-    deleteText.appendChild(trashImg);
+    this.deleteText.appendChild(this.editNote);
+    this.deleteText.appendChild(this.taskComplete);
+    this.deleteText.appendChild(this.trashIcon);
 
     // add class to buttons
-    editNote.classList.add("edit");
-    const completeClass = taskComplete.classList;
-    completeClass.add("complete");
-    const deleteClass = trashImg.classList;
-    deleteClass.add("delete");
-
-    text.innerText = textInput.value;
+    this.editNote.classList.add("edit");
+    this.taskComplete.classList.add("complete");
+    this.trashIcon.classList.add("delete");
+    this.text.innerText = text;
+   }
 }
 
 
 let pText1;
 
+function restoreNotes(){
+    // let notes = localStorage.length;
+    // for(let i = 1; i<notes+1; i++){
+    //     // console.log(localStorage.getItem("note1"));
+    //     notesArray.push(new Note(localStorage.getItem(`note${i}`)));
+    // }
+
+}
+
+
+window.onload = () =>{
+    restoreNotes();
+    notesArray.forEach(element => {
+        createNotes(element);
+    });
+    
+
+}
+
+function createNotes(text){
+    
+    new Note(text);
+    
+}
+
+function saveLocalStorage(){
+    localStorage.setItem("notes",JSON.stringify(notesArray));
+}
+
+function restoreNotes(){
+    notesArray= JSON.parse(localStorage.getItem("notes"));
+}
+
+
 
 
 saveText.onclick = () =>{
     if(textInput.value != "" && edit == false){
-    // create Note
-    createNote();
+    
+    // add new note to array
+    notesArray.push(textInput.value);
+
+    createNotes(textInput.value);
+
+    // save in local storage
+
+    saveLocalStorage();
+    
     
     // hide notes when writing
     if(pageArea.classList.contains("hide")){
@@ -148,10 +185,35 @@ document.addEventListener("click", (e) =>{
     const parentEl = targetEl.closest("div");
 
     // Delete button
+    
     if(targetEl.classList.contains("delete")){
     const deleteEl = parentEl.closest(".note");
+    let parentText = deleteEl.children[0];
+    let parentP = parentText.children[0];
+
+    notesArray.forEach(element => {
+
+        // checks if the element matches 
+        if(parentP.innerText == element){
+            // get the index of the deleted element
+            let i = notesArray.indexOf(element)
+            // remove the element from array
+            notesArray.splice(i);
+ 
+        }
+
+        
+    });
+    // delete element from screen
     deleteEl.remove(e.target);
+
+
+    // save changes in local storage
+
+    saveLocalStorage();
+    
     }
+  
     // complete button
     if(targetEl.classList.contains("complete")){
         let parentDiv = targetEl.closest("div");
@@ -178,9 +240,7 @@ document.addEventListener("click", (e) =>{
             pText.innerText = textInput.value;
             pText1 = pText;
             
-            textInput.classList.toggle("hide");
-
-            // editElement();
+            textInput.classList.toggle("hide");        
 
 
             if(!pageArea.classList.contains("hide")){
@@ -188,7 +248,7 @@ document.addEventListener("click", (e) =>{
             }else{
             pageArea.classList.toggle("hide");
             }
-            }
+        }
 });
 
 
