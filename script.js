@@ -83,23 +83,16 @@ class Note{
 }
 
 
-let pText1;
-
-function restoreNotes(){
-    // let notes = localStorage.length;
-    // for(let i = 1; i<notes+1; i++){
-    //     // console.log(localStorage.getItem("note1"));
-    //     notesArray.push(new Note(localStorage.getItem(`note${i}`)));
-    // }
-
-}
-
+let pText1; 
 
 window.onload = () =>{
+    if(localStorage.length >0){
     restoreNotes();
     notesArray.forEach(element => {
         createNotes(element);
     });
+}
+
     
 
 }
@@ -118,7 +111,7 @@ function restoreNotes(){
     notesArray= JSON.parse(localStorage.getItem("notes"));
 }
 
-let newTextValue;
+
 
 
 saveText.onclick = () =>{
@@ -148,10 +141,7 @@ saveText.onclick = () =>{
     // Edit Text
     if(edit == true){
         pText1.innerText = textInput.value;
-        // edit = false;
-
-    notesArray[newTextValue]=textInput.value;
-    
+        edit = false;
         // hide notes when writing
     if(pageArea.classList.contains("hide")){
         pageArea.classList.toggle("hide");
@@ -163,7 +153,6 @@ saveText.onclick = () =>{
     }
         
     }
-    saveLocalStorage();
     
     textInput.value = "";
 
@@ -194,29 +183,28 @@ document.addEventListener("click", (e) =>{
     const deleteEl = parentEl.closest(".note");
     let parentText = deleteEl.children[0];
     let parentP = parentText.children[0];
-    let selecionedText= parentP.innerText;
+    
+    
+    for(let i =0; i <notesArray.length;i++){
 
-
-    // Big Brain Time
-    for( let i = 0; i<notesArray.length;i++){
-        console.log(selecionedText);
-        // checks if the element matches 
-        if(selecionedText === notesArray[i]){
-
-            // get the index of the deleted element
-            let index = notesArray.indexOf(notesArray[i])
-            // remove the element from array
-            console.log(index);
-            notesArray.splice(index);
-            break;
-            
-            
+        if(parentP.innerText == notesArray[i]){
+            notesArray.splice(i,1);
         }
-        
-
-  
     }
 
+    // notesArray.forEach(element => {
+
+    //     // checks if the element matches 
+    //     if(parentP.innerText == element){
+    //         // get the index of the deleted element
+    //         let i = notesArray.indexOf(element)
+    //         // remove the element from array
+    //         notesArray.splice(i);
+ 
+    //     }
+
+        
+    // });
     // delete element from screen
     deleteEl.remove(e.target);
 
@@ -226,7 +214,6 @@ document.addEventListener("click", (e) =>{
     saveLocalStorage();
     
     }
-
   
     // complete button
     if(targetEl.classList.contains("complete")){
@@ -241,7 +228,6 @@ document.addEventListener("click", (e) =>{
             p.classList.add("taskComplete");
         }
         }
-    // edit button
         if(targetEl.classList.contains("edit")){
             edit = true;
             if(!textInput.classList.contains("hide")){
@@ -252,40 +238,16 @@ document.addEventListener("click", (e) =>{
             let parentNoteText = parentText.children[0];
             let pText =  parentNoteText.children[0];
             textInput.value = pText.innerText;
-            // pText.innerText = textInput.value;
+            pText.innerText = textInput.value;
             pText1 = pText;
             
-            textInput.classList.toggle("hide");
-            
-            // Big Brain Time
-            notesArray.forEach(element => {
-            // checks if the element matches 
-            if(pText.innerText == element){
-                console.log(textInput.value);
-            // get the index of the edited element
-            let i = notesArray.indexOf(element)
-            // update the element on array
-            newTextValue = i;
-
-
-            }
-        });
-        saveLocalStorage();
+            textInput.classList.toggle("hide");        
 
 
             if(!pageArea.classList.contains("hide")){
-                pageArea.classList.add("hide");
+            pageArea.classList.add("hide");
             }else{
-                pageArea.classList.toggle("hide");
-            
+            pageArea.classList.toggle("hide");
             }
         }
 });
-
-
-
-
-
-
-
-
