@@ -86,15 +86,12 @@ class Note{
 let pText1; 
 
 window.onload = () =>{
-    if(notesArray.length >-1){
+    if(localStorage.getItem("notes")){
     restoreNotes();
     notesArray.forEach(element => {
         createNotes(element);
     });
-}
-
-    
-
+    }
 }
 
 function createNotes(text){
