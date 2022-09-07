@@ -13,7 +13,7 @@ let notesArray = [];
 
 
 class Note{
-    constructor(text){
+    constructor(text,checked){
     this.note= document.createElement("div");   
     this.noteText = document.createElement("div");
     this.text = document.createElement("p");
@@ -79,6 +79,12 @@ class Note{
     this.taskComplete.classList.add("complete");
     this.trashIcon.classList.add("delete");
     this.text.innerText = text;
+
+    // add checked to restoreNotes
+    this.taskComplete = checked;
+    if(this.taskComplete == 1){
+        this.text.classList.add("taskComplete");
+    }
    }
 }
 
@@ -89,15 +95,15 @@ window.onload = () =>{
     if(localStorage.getItem("notes")){
     restoreNotes();
     notesArray.forEach(element => {
-        createNotes(element);
+        createNotes(element.text,element.checked);
     });
     }
 }
 
 
-function createNotes(text){
+function createNotes(text,checked){
     
-    new Note(text);
+    new Note(text,checked);
     
 }
 
@@ -114,11 +120,11 @@ function restoreNotes(){
 
 saveText.onclick = () =>{
     if(textInput.value != "" && edit == false){
-    
+    let Text = textInput.value
     // add new note to array
-    notesArray.push(textInput.value);
+    notesArray.push({text:textInput.value,checked:0});
 
-    createNotes(textInput.value);
+    createNotes(textInput.value,0);
 
     // save in local storage
 
@@ -139,12 +145,13 @@ saveText.onclick = () =>{
     // Edit Text
     if(edit == true){
         for(let i =0; i <notesArray.length;i++){
-            if(pText1.innerText == notesArray[i]){
-                notesArray[i]=pText1.innerText;
-                index = i;
+            if(pText1.innerText == notesArray[i].text){
+                notesArray[i].text=pText1.innerText;
+                var index = i;
             }
         }
-        notesArray[index] = textInput.value
+        
+        notesArray[index].text = textInput.value;
         pText1.innerText = textInput.value;
         edit = false;
 
@@ -195,8 +202,9 @@ document.addEventListener("click", (e) =>{
     
     for(let i =0; i <notesArray.length;i++){
 
-        if(parentP.innerText == notesArray[i]){
+        if(parentP.innerText == notesArray[i].text){
             notesArray.splice(i,1);
+            break;
         }
     }
 
@@ -216,13 +224,34 @@ document.addEventListener("click", (e) =>{
         let parentNote = targetEl.closest(".note");
         let noteText = parentNote.children[0];
         let p =noteText.children[0];
+        // console.log(parentNote.children[0].children[0].innerText)
+
+
+        for(let i =0; i <notesArray.length;i++){
+
+            if(parentNote.children[0].children[0].innerText == notesArray[i].text){
+                if(!notesArray[i].checked == 1){
+                    
+                    notesArray[i].checked = 1;
+
+                }else{
+                    notesArray[i].checked = 0;
+
+
+                }
+        }
+    }
+
         if(p.classList.contains("taskComplete")){
         p.classList.toggle("taskComplete");
         }
         else{
             p.classList.add("taskComplete");
         }
-        }
+        saveLocalStorage();
+    }
+
+        // edit
         if(targetEl.classList.contains("edit")){
             edit = true;
             if(!textInput.classList.contains("hide")){
@@ -246,4 +275,4 @@ document.addEventListener("click", (e) =>{
             pageArea.classList.toggle("hide");
             }
         }
-});
+})
