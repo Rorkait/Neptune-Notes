@@ -94,6 +94,7 @@ window.onload = () =>{
     }
 }
 
+
 function createNotes(text){
     
     new Note(text);
@@ -137,8 +138,18 @@ saveText.onclick = () =>{
 
     // Edit Text
     if(edit == true){
+        for(let i =0; i <notesArray.length;i++){
+            if(pText1.innerText == notesArray[i]){
+                notesArray[i]=pText1.innerText;
+                index = i;
+            }
+        }
+        notesArray[index] = textInput.value
         pText1.innerText = textInput.value;
         edit = false;
+
+        saveLocalStorage();
+    
         // hide notes when writing
     if(pageArea.classList.contains("hide")){
         pageArea.classList.toggle("hide");
@@ -189,19 +200,6 @@ document.addEventListener("click", (e) =>{
         }
     }
 
-    // notesArray.forEach(element => {
-
-    //     // checks if the element matches 
-    //     if(parentP.innerText == element){
-    //         // get the index of the deleted element
-    //         let i = notesArray.indexOf(element)
-    //         // remove the element from array
-    //         notesArray.splice(i);
- 
-    //     }
-
-        
-    // });
     // delete element from screen
     deleteEl.remove(e.target);
 
@@ -237,6 +235,7 @@ document.addEventListener("click", (e) =>{
             textInput.value = pText.innerText;
             pText.innerText = textInput.value;
             pText1 = pText;
+
             
             textInput.classList.toggle("hide");        
 
