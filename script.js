@@ -18,6 +18,8 @@ class Note{
     this.noteText = document.createElement("div");
     this.text = document.createElement("p");
 
+    this.note.classList.add("addNote");
+
     this.deleteButton = document.createElement("div");
     this.deleteText = document.createElement("div");
 
@@ -85,6 +87,15 @@ class Note{
     if(this.taskComplete == 1){
         this.text.classList.add("taskComplete");
     }
+
+    // add Animation
+
+    let note = this.note;
+
+    this.removeClassAddNote = function(){
+        note.classList.remove("addNote");
+    }
+    const removeAnimation = setTimeout(this.removeClassAddNote,300);
    }
 }
 
@@ -125,6 +136,8 @@ saveText.onclick = () =>{
     notesArray.push({text:textInput.value,checked:0});
 
     createNotes(textInput.value,0);
+
+
 
     // save in local storage
 
@@ -198,25 +211,34 @@ document.addEventListener("click", (e) =>{
     const deleteEl = parentEl.closest(".note");
     let parentText = deleteEl.children[0];
     let parentP = parentText.children[0];
-    
-    
-    for(let i =0; i <notesArray.length;i++){
 
-        if(parentP.innerText == notesArray[i].text){
-            notesArray.splice(i,1);
-            break;
+    console.log(deleteEl);
+    // add Animation
+    deleteEl.classList.add("remove");
+    // delay Animation
+    const deleteDelay = setTimeout(removeNote,400);
+
+    function removeNote(){
+        for(let i =0; i <notesArray.length;i++){
+
+            if(parentP.innerText == notesArray[i].text){
+                notesArray.splice(i,1);
+                break;
+            }
         }
-    }
-
-    // delete element from screen
-    deleteEl.remove(e.target);
-
-
-    // save changes in local storage
-
-    saveLocalStorage();
     
+        // delete element from screen
+        deleteEl.remove(e.target);
+    
+    
+        // save changes in local storage
+    
+        saveLocalStorage();
+        
+        }
+
     }
+    
   
     // complete button
     if(targetEl.classList.contains("complete")){
